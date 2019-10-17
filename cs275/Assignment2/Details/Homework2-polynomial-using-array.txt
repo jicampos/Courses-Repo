@@ -1,0 +1,72 @@
+			Homework: Polynomial Using Array
+
+Description: Implement a polynomial class
+
+(1) Name your class Polynomial
+
+(2) Use array of doubles to store the coefficients so that the coefficient for x^k is stored in the location [k] of the array. 
+
+(3) define the following methods: 
+
+a. public Polynomial() 
+
+	POSTCONDITION: Creates a polynomial represents 0
+
+b. public Polynomial(double a0)
+
+	POSTCONDITION: Creates a polynomial has a single x^0 term with coefficient a0
+
+c. public Polynomial(Polynomial p)
+
+	POSTCONDITION: Creates a polynomial is the copy of p 
+
+d. public void add_to_coef(double amount, int exponent)
+
+     POSTCONDITION: Adds the given amount to the coefficient of the specified exponent.
+     Note: the exponent is allowed to be greater than the degree of the polynomial   
+      example: if p = x + 1, after p.add_to_coef(1, 2), p = x^2  + x + 1
+          
+
+e.  public void assign_coef(double coefficient, int exponent)
+     POSTCONDITION: Sets the coefficient for the specified exponent.
+     Note: the exponent is allowed to be greater than the degree of the polynomial   
+
+f. public double coefficient(int exponent) 
+     POSTCONDITION: Returns coefficient at specified exponent of this polynomial. 
+     Note: the exponent is allowed to be greater than the degree of the polynomial   
+     e.g. if p = x + 1; p.coeffcient(3) should return 0
+
+g. public double eval(double x)
+     POSTCONDITION: The return value is the value of this polynomial with the given value for the variable x.
+     Do not use power method from Math, which is very low efficient 
+
+h. public boolean equals (Object p)
+
+	POSTCONDITION: return true if p is a polynomial and it has same terms as this polynomial
+
+i. public string toString()
+
+	POSTCONDITION: return the polynomial as a string like “2x^2 + 3x + 4”
+   	
+        Important only non-zero terms 
+
+j. public Polynomial add(Polynomial p)
+     POSTCONDITION:
+                this object and p are not changed   
+                return a polynomial that is the sum of   p and this polynomial 
+
+
+k. public Polynomial multiply(Polynomial p)
+     POSTCONDITION: 
+     this object and p should not be changed
+     returns a new polynomial obtained by multiplying this term and p. For example, if this polynomial is
+     2x^2 + 3x + 4 and p is 5x^2 - 1x + 7, then at the end of this function, it will return the polynomial 10x^4 + 13x^3 + 31x^2 + 17x + 28.
+
+l. Write a single main method to test ALL the methods and classes.  
+   You can read from the keyboard, or from the file. The format of the file should be: first line specifies the maximum degree, 
+   then followed by the terms, one per line. You can assume they are in the right order.  For example:
+
+polynomialA.txt
+100
+(3,0)
+(-1, 3)

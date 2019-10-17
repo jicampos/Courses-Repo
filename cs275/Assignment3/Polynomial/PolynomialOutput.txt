@@ -1,0 +1,24 @@
+Welcome to DrJava.  Working directory is C:\Users\Javier\Documents\PNW\PNW_3\Cs 275\Assignment 3
+> run PolynomialTest
+p1 = new Polynomial(): p1 = 0.0
+        p1.add_to_coef(1, 100), p1 =  + x^100
+        p1.assign_coef(-1, 5),  p1 =  + x^100 - x^5
+        p1.assign_coef(0, 100),  p1 =  - x^5
+        p1.add_to_coef(1, 0),  p1 =  - x^5 + 1.0
+        p1(2) = -31.0
+
+p3 = new Polynomial (p1),  p3 =  - x^5 + 1.0
+        p3 == p1 false
+        p3.equals(p1) true
+        p3.assign_coef(1, 5),  p3 =  + x^5 + 1.0
+        p3.equals(p1) false
+        p3.assign_coef(2,2),  p3 =  + x^5 + 2.0x^2 + 1.0
+
+p1 + p3 =  - x^5 + 2.0x^2 + 1.0
+
+p2 = new Polynomial(1): p2 = 1.0
+        p2.assign_coef(1,5), p2 =  + x^5 + 1.0
+
+p1 * p2 =  - x^10 + 1.0
+p1 * p2 * p2=  - x^15 - x^10 + x^5 + 1.0
+> 

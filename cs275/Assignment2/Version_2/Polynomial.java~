@@ -1,0 +1,182 @@
+/**
+ * Polynomial representation using arrays to store the values of
+ * coefficients in the arrays index that correlates to its degree
+ * @author Javier Campos
+ * version 1.0
+ **/
+
+public class Polynomial{
+
+  double[] coeff;
+  int exp;
+   
+   
+  public Polynomial(){
+ 
+    coeff = new double[10];
+    exp = 0;
+  }
+
+ 
+  public Polynomial(double a0){
+ 
+    exp = 0;
+   
+    coeff = new double[10];
+    coeff[exp] = a0;
+  }
+ 
+
+  public Polynomial(Polynomial p){
+ 
+    exp = p.exp;
+    coeff = new double[p.exp+1];
+   
+    for(int i = 0; i < p.exp; i++){
+   
+      coeff[i] = p.coeff[i];
+    }
+   
+  }
+ 
+
+  public void add_to_coef(double amount, int exponent){
+   
+    double[] answer;
+    
+    if(amount != 0){
+      if(exponent >= coeff.length){
+        answer = new double[exponent * 3];
+        
+        for(int i = 0; i < exp; i++){
+          
+          answer[i] = coeff[i];
+        }
+        
+        answer[exponent] = amount;
+        coeff = answer;
+      }
+      else
+        coeff[exponent] = coeff[exponent] + amount;
+      
+      if(exp < exponent)
+        exp = exponent;
+    }
+  }
+ 
+ 
+  public void assign_coeff(double coefficient, int exponent){
+    if(exponent != 0){
+      if(exponent >= coeff.length){
+        double[] answer = new double[exponent * 3];
+        
+        for(int i = 0; i < exp; i++){
+          
+          answer[i] = coeff[i];
+        }
+        answer[exponent] = coefficient;
+        coeff = answer;
+      }
+      else
+        coeff[exponent] = coefficient;
+      
+      if(exp < exponent)
+        exp = exponent;
+    }
+  }
+ 
+ 
+  public double coefficient(int exponent){
+ 
+    if(exponent > coeff.length)
+      return 0;
+    else
+      return coeff[exponent];
+  }
+ 
+ 
+ 
+  public double eval(double x){
+
+      double result = 0;
+      for (int i = exp ; i >= 0; i--)
+        result = coeff[i] + (x * result);
+      return result;
+  }
+ 
+ 
+  public boolean equals(Object p){
+ 
+    if(p instanceof Polynomial){
+       
+      Polynomial p1 = (Polynomial)p;
+      for(int i = 0; i < p1.coeff.length; i++){ 
+        if(coeff[i] != p1.coeff[i])
+          return false;
+      }
+      return true;
+    }
+    return false;
+  }
+ 
+ 
+  public String toString(){ 
+  
+    String str = "";
+    for(int k = exp; k >= 0; k--){
+      if(coeff[k] != 0){
+        if(k > 0){
+        
+          str = str + coeff[k] + "x^" + k;
+          str = str + "+";
+        }
+        else
+          str = str + coeff[0];
+      }
+    }
+    return str;
+  }
+
+ public Polynomial add(Polynomial p)
+{
+  Polynomial ans= new Polynomial();
+  if( p.exp > exp)
+  {
+    double[] coeff = new double[p.exp+1];
+    for(int i=0; i <= exp; i++)
+    {
+    coeff[i] = coeff[i] + p.coeff[i];
+    }
+    
+    coeff[p.exp] = p.coeff[p.exp];
+    ans.exp = p.exp;
+    ans.coeff = coeff;
+    
+  }
+  else
+    ans.coeff[ans.exp] = p.coeff[p.exp];
+  return ans;
+}
+
+ 
+ 
+  public Polynomial multiply(Polynomial p){
+    
+  Polynomial answer = new Polynomial();
+ 
+  for(int i = 0;  i < exp; i++){
+    for(int j = 0;  j < p.exp; j++){
+      
+      if(i == j)
+        answer.add_to_coef(coeff[i] + p.coeff[j], i);
+      else
+        answer.add_to_coef(coeff[i] + p.coeff[j], i*j);
+       
+    }
+  }
+ 
+  return answer;
+  }
+
+
+}

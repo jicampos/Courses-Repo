@@ -1,0 +1,38 @@
+			Homework: infix to postfix
+
+Description: Implement a program that 
+
+
+ (1) takes as input an infix expression 
+ 
+ (2) outputs the equivalent post-fix expression. The basic algorithm is
+   illustrated in figure 6.10: converting an infix expression to a postfix expression  in textbook
+ 
+ (3) Assume that the input may contain unsigned double;  arithmetic operations +, -, *, and /; as well as parentheses. 
+     However, the expression need not be fully parenthesized.
+
+ (4) if the expression is well formed, 
+      use the "evaluating postfix expressions" outlined in textbook to evlaue the postfix expression
+       output the value of the expression
+    else 
+      print a simple message to indicate the error
+ 
+ (5) Your program should allow the user to enter additional expressions until the user says he or she wishes to end the program. 
+ 
+ (6) test at least the following cases: 
+     a. fully parenthesized
+     b. not fullly parenthesized
+     c. expression with extra (
+     d. expression with extra )
+     e. the operands can be double or int
+     
+  (7) you can use the following files in 6.4 as references 
+        convertDemonstration.java: 
+                     repeatedly converting fully parenthsized infix to postfix 
+                     the tokens don't have to be separated by space
+
+        Infix2PostfixOneStackCheckSyntax: 
+ 
+                      converting fully parenthsized infix to postfix and 
+                     the tokens are separated by space
+

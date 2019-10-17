@@ -1,0 +1,301 @@
+public class Polynomial  {
+  // this is a nested static class, it defines a type
+  // all the instance varaibles can be access directly inside Polynomial class even though they have
+  // private modifier
+  private static class TermNode{
+    private double coefficient;
+    private int exponent;
+    private TermNode next;
+    
+    public TermNode(int exp, double coeff, TermNode nextTerm )
+    {
+      coefficient= coeff;
+      exponent = exp;
+      next = nextTerm;
+    }
+  }
+  
+  // instance variables of Polynomial
+  // first is the term of the Polynomial with the highest degree
+  private TermNode first;   
+  
+  
+  /**Postcondition:</b> Creates a polynomial which is 0.
+    * **/
+  public Polynomial() {
+    first = new TermNode(0,0, null);
+  }
+  
+  /**Postcondition:</b> Creates a polynomial which has a single term a0*x^0
+    * @param a0 The value to be set as the coefficient of the constant (x^0) term.
+    * **/
+  
+  public Polynomial(double a0) {
+    first = new TermNode(0,a0,null);
+  }
+  
+  /**<b>Postcondition:</b> Creates a copy of Polynomial p
+    * @param p the Polynomial which is to be copied.
+    * **/
+  
+  public Polynomial(Polynomial p) {
+    first = new TermNode(p.first.exponent, p.first.coefficient, null);
+    TermNode tail = first;
+    for(TermNode cursor = p.first.next; cursor != null; cursor = cursor.next){
+      tail.next = new TermNode(cursor.exponent, cursor.coefficient, null);
+      tail = tail.next;
+    }
+  }
+  
+  /**<b>Postcondition:</b> Adds the given amount to the coefficient of the specified exponent. 
+    * @param amount The amount to be added to the coefficient.
+    * @param exponent The degree of the term whose coefficient is to be modified.
+    * (1) Note that the exponent can be arbitrary
+    * (2) If you want, you can assume the amount is not 0, however, it is possible that 
+    *   after you add the amount, the coefficient becomes 0, in which case, you should delete the TermNode
+    * **/
+  
+  public void add_to_coef(double amount, int exponent) {
+    
+    TermNode previous = first;
+    
+    if(exponent > first.exponent && amount != 0) {  // Added && amount != 0 
+      if(amount + first.coefficient == 0)  // Added if statement to check for deletion of node
+        first = first.next;
+      else
+        first = new TermNode(exponent, amount, first);
+    }
+    else if(first.exponent == exponent){
+      if((amount + first.coefficient) == 0)
+        first = first.next;
+      else 
+        first.coefficient += amount;
+    }
+    else{
+      for(TermNode cursor = first.next; cursor.exponent >= exponent; cursor = cursor.next){ // Changed cursor != null to cursor.exponent >= exponent
+        if(cursor.exponent == exponent){
+          if((amount + cursor.coefficient) == 0)
+            previous.next = cursor.next;
+          else
+            cursor.coefficient += amount;
+        }
+        if(exponent < previous.exponent && exponent > cursor.exponent)
+          previous.next = new TermNode(exponent, amount, cursor);
+        
+        previous = previous.next;
+      }
+      
+    }
+    //previous = previous.next;
+  }
+  
+  /**<b>Postcondition:</b> Sets the coefficient of a specified term to a specified value.
+    * @param coefficient The new value of the coefficient.
+    * @param exponent The degree of the term whose coefficient is to be modified.
+    * (1) Note that the exponent can be arbitrary
+    * (2) The coefficient may be 0
+    * **/
+  
+  public void assign_coef(double coefficient, int exponent) { 
+    
+    TermNode previous = first;
+    
+    if(exponent > first.exponent && coefficient != 0) // Added && coefficient != 0
+      first = new TermNode(exponent, coefficient, first);
+    else if(first.exponent == exponent){
+      if(coefficient == 0)
+        first = first.next;
+      else 
+        first.coefficient = coefficient;
+    }
+    else{
+      for(TermNode cursor = first.next; cursor.exponent > exponent; cursor = cursor.next){ // Changed cursor != null to cursor.exponent >= exponent
+        if(cursor.exponent == exponent){
+          if(coefficient == 0)
+            previous.next = cursor.next;
+          else 
+            cursor.coefficient = coefficient;
+        }
+        if(exponent < previous.exponent && exponent > cursor.exponent)
+          previous.next = new TermNode(exponent, coefficient, cursor);
+        
+        previous = previous.next;
+      }
+      
+    }
+    
+  }
+  
+  /** <b>Postcondition:</b>  Returns coefficient at specified exponent of this polynomial.
+    * @param exponent The exponent of the term whose coefficient is sought.
+    * @return The coefficient of the term.
+    * @throws Exception if the degree of the activating polynomial is less than that of the requested term.
+    * **/
+  
+  public double coefficient(int exponent){
+    
+    double answer = 0;
+    if(exponent > first.exponent)
+      return 0;  // Chaged from throwing an exception to returning 0. This is what I had previously   --> throw new IllegalArgumentException("Exponent is larger than the highest degree in polynomial.");
+    for(TermNode cursor = first; cursor != null; cursor = cursor.next){
+      if(cursor.exponent == exponent){
+        answer = cursor.coefficient;
+        break;
+      }
+    }
+    return answer;
+  }
+  
+  /** @return The value of this Polynomial with the given value for the variable x.
+    * @param x The value at which the Polynomial is to be evaluated.
+    * using Horner's method to evaluation
+    * see the link here 
+    * https://en.wikipedia.org/wiki/Horner%27s_method
+    * 
+    ***/
+  
+  public double eval(double x) {
+    TermNode t = first;  
+    double sum = t.coefficient;
+    
+    //int curExponent = t.exponent;
+    while(t.next!=null){        
+      if(t.exponent != t.next.exponent){
+        for(int i = t.exponent; i > t.next.exponent; i--){
+          sum = (x * sum); 
+        }
+      }
+      else{
+        sum = (x * sum);
+      }
+      
+      sum += t.next.coefficient;
+      t = t.next;
+    }
+    
+    return sum;  
+  }
+  
+  /**@return True if p and this polynomial is same
+    * @param p The polynomial to be tested for equality.
+    * */
+  
+  public boolean equals (Object obj) {
+    if(obj instanceof Polynomial)
+    {
+      Polynomial p1 = (Polynomial)obj;
+      TermNode pointer = p1.first;
+      for(TermNode cursor = first; cursor != null; cursor = cursor.next){
+        if(pointer.exponent != cursor.exponent)
+          return false;
+        else{
+          if(pointer.coefficient != cursor.coefficient)
+            return false;
+        } 
+        pointer = pointer.next;
+      }
+      
+      if(pointer != null)
+        return false;
+      else
+        return true;
+    }
+    return false;
+  }
+  
+  /**@return Returns a string representing the polynomial expression with coefficients displayed to the tenths place, 
+    * omitting any coefficients that are zero.  
+    * If all coefficients are 0, then the zero function is reported.
+    * 
+    **/
+  public String toString() {
+    String str = "";
+    TermNode cursor;
+    
+    if(first.next == null){
+      str += first.coefficient;
+      return str;
+    }
+    
+    for(cursor = first; cursor != null; cursor = cursor.next){ 
+      
+      if(cursor.coefficient > 0.0){
+        if(cursor.exponent != 0){
+          if(cursor.coefficient != 1.0)
+            str += " + " + cursor.coefficient + "x^" + cursor.exponent;
+          else
+            str += " + x^" + cursor.exponent;
+        }
+        else{
+          if(cursor.coefficient != 0.0)
+            str += " + " + cursor.coefficient;
+        }
+      }
+      else{
+        if(cursor.exponent != 0){
+          if(cursor.coefficient == 1.0)
+            str += " - " + (-1*cursor.coefficient) + "x^" + cursor.exponent;
+          else
+            str += " - x^" + cursor.exponent;
+        }
+        else{
+          if(cursor.coefficient != 0.0)
+            str += " - " + (-1*cursor.coefficient);
+        }
+      }
+    }
+    return str;
+  }
+  
+  /**@return Returns a Polynomial that is the sum of p and this Polynomial.
+    * @param p The Polynomial to be added to the activating Polynomial.
+    * **/
+  public Polynomial add(Polynomial p) {
+    
+    Polynomial answer = new Polynomial();
+    
+    TermNode tail_1 = first, tail_2 = p.first;
+    
+    while(tail_1 != null) { // I changed this from a for loop to a while loop. This is what I had previoudly ---> for(tail_1; tail. != null; cursor = cursor.next)
+      if(tail_1.exponent > tail_2.exponent){
+        answer.add_to_coef(tail_1.coefficient, tail_1.exponent);
+        tail_1 = tail_1.next;
+      }
+      else if(tail_1.exponent < tail_2.exponent){
+        answer.add_to_coef(tail_2.coefficient, tail_2.exponent);
+        tail_2 = tail_2.next;
+      }
+      else{
+        answer.add_to_coef(tail_1.coefficient + tail_2.coefficient, tail_1.exponent);
+        tail_1 = tail_1.next;
+        tail_2 = tail_2.next;
+      }
+    }
+    
+    for(TermNode cursor = tail_2; cursor != null; cursor = cursor.next){
+      answer.add_to_coef(cursor.coefficient, cursor.exponent);
+    }
+    return answer;
+  }
+ 
+  /**<b>Postcondition:</b> Returns a new polynomial obtained by multiplying this term and p. For example, if this polynomial is
+    2x^2 + 3x + 4 and p is 5x^2 - 1x + 7, then at the end of this function, it will return the polynomial 10x^4 + 13x^3 + 31x^2 + 17x + 28.
+    @param p The polynomial to be multiplied.
+    @return The product of the activating Polynomial and p.
+    **/
+  
+  public Polynomial multiply(Polynomial p) {
+    
+    Polynomial answer = new Polynomial();
+    
+    for(TermNode cursor = first; cursor != null; cursor = cursor.next){
+      for(TermNode cursor2 = p.first; cursor2 != null; cursor2 = cursor2.next){
+        if(cursor.coefficient != cursor2.coefficient)
+          answer.add_to_coef(cursor.coefficient*cursor2.coefficient, cursor.exponent+cursor2.exponent);
+        else
+          answer.add_to_coef(cursor.coefficient*cursor2.coefficient, cursor2.exponent);
+      }
+    }
+    return answer;
+  }
+}

@@ -1,0 +1,25 @@
+public class PolynomialTest{
+
+  public static void main(String[] args){
+  
+    double[] array = new double[4];
+    
+    array[0] = 34;
+    array[1] = 56;
+    array[2] = 12;
+    array[3] = 25;
+    
+    Polynomial ref = new Polynomial();
+    String answer ="";
+    int size = array.length;
+    for(int i = size; i > 0; i--){
+      if(array[i] != 0){
+        System.out.print(array[i] + "x^" + i + " ");
+        //answer +=array[i] + "x^" + i + " + ";
+      }
+      
+    }
+    System.out.println();
+    System.out.println(answer);
+  }
+}
