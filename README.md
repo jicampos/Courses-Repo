@@ -1,8 +1,8 @@
 # Courses-Repo
 Repository is a collection of courses and code for assignments.
 ## Electrical and Computer Engineering
-ECE 251 Object Orientated Programming
-ECE 301 Signals and Systems
+ECE 251 Object Orientated Programming  
+ECE 301 Signals and Systems  
 
 ECE 354 Software Engineering Design 
 
