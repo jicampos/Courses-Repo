@@ -14,11 +14,25 @@ class ClientThread(threading.Thread):
 
 	def run(self):
 		random.shuffle(questions) # shuffle questions for different order
-		# sentence = connectionSocket.recv(1024)
-		# capitalizedSentence = sentence.upper()
-		# self.connectionSocket.send(capitalizedSentence)
-		self.connectionSocket.send(questions[0][0])
-		self.connectionSocket.close()
+		incorrect = 0
+		questions_asked = 0
+
+		while incorrect < 3 and questions_asked < 10:
+			self.connectionSocket.send(questions[questions_asked][0])
+			response = self.connectionSocket.recv(1024)	
+			# print(response, type(response))
+			if response != questions[questions_asked][1]:
+				incorrect = incorrect + 1
+
+			questions_asked = questions_asked + 1
+
+		if incorrect == 3:
+			self.connectionSocket.send("Please come again after practice!")
+			self.connectionSocket.close()
+		else:
+			self.connectionSocket.send("Congratulations, you played very well!")
+			self.connectionSocket.close()
+
 
 serverPort = 12000
 serverSocket = socket(AF_INET, SOCK_STREAM)
@@ -28,14 +42,12 @@ print("The server is ready to recieve")
 
 questions = []
 fd = open("quiz.txt")
-
 for line in fd.readlines():
 	line = line.rstrip()  # Strips EOL
 	arr = line.split(',') # Splits question and answer
 	questions.append(arr) 
-
+	# print(arr)
 fd.close()
-print(questions[0], type(questions[0]))
 
 while 1:
 	connectionSocket, addr= serverSocket.accept()
