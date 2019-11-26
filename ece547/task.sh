@@ -13,13 +13,14 @@ printf "Beginning to ping...\n\n"
 
 for website in $websites
 do
-	printf "$website\n" 
-	STRING=",$(ping -c 1 $website | tail -1| awk -F '/' '{print $5}')"
-	# printf ",$STRING" >> $file_ping
+	printf "$website" 
+	STRING=",$(ping -c 12 $website | tail -1| awk -F '/' '{print $5}')"
 	if [ $STRING = "," ]; then
 		printf ",0" >> $file_ping
+		printf ",0\n"
 	else 
 		printf "$STRING" >> $file_ping
+		printf "$STRING\n"
 	fi
 done
 
@@ -28,10 +29,10 @@ printf "\nBeginning to traceroute...\n\n"
 
 for website in $websites
 do 
-	printf "$website\n" 
-	OUTPUT="$(traceroute $website | wc -l)"
-	printf ",$(($OUTPUT-1))" >> $file_traceroute
-	# echo "$(($OUTPUT-1)),"
+	printf "$website" 
+	OUTPUT="$(traceroute $website | tail -1 | awk -F ' ' '{print $1}')"
+	printf ",$OUTPUT" >> $file_traceroute
+	printf ",$OUTPUT\n"
 done 
 
 printf "\n" >> $file_traceroute 
