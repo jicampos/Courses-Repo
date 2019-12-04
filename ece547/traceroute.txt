@@ -1,0 +1,4 @@
+Date, Time, www.purdue.edu, www.rose-hulman.edu, www.pace.edu, www.princeton.edu, www5.usp.br, www.unicamp.br, www.cam.ac.uk, www.iitd.ac.in, www.amu.ac.in
+
+12/01/2019,03:40:19,15,15,30,17,30,30,30,30,30
+12/01/2019,03:46:35,15,15,30,17,30,30,30,30,30
